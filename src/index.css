@@ -1,3 +1,36 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button:focus {
+    outline: none;
+}
+
+.mesh {
+    background-color: #322840;
+
+    background-image: radial-gradient(at 21% 33%, #211a37 0px, transparent 50%),
+        radial-gradient(at 79% 32%, #252844 0px, transparent 50%),
+        radial-gradient(at 26% 83%, #1c2e54 0px, transparent 50%);
+
+    /* ryan original colors */
+    /* background-image: radial-gradient(
+      at 21% 33%,
+      hsla(242, 45%, 10%, 1) 0px,
+      transparent 50%
+    ),
+    radial-gradient(at 79% 32%, hsla(231, 54%, 23%, 1) 0px, transparent 50%),
+    radial-gradient(at 26% 83%, hsla(232, 45%, 36%, 1) 0px, transparent 50%); */
+
+    /* debug colors */
+    /* background-image: radial-gradient(at 21% 33%, blue 0px, transparent 50%),
+    radial-gradient(at 79% 42%, red 0px, transparent 50%),
+    radial-gradient(at 26% 83%, green 0px, transparent 50%); */
+
+    /* animation: gradient 3s linear infinite; */
+    /* animation: rotate 3s linear infinite; */
+}

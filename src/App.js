@@ -7,6 +7,7 @@ import {
   useTransform,
   useMotionTemplate,
   useDragControls,
+  animate,
 } from "framer-motion";
 
 const DURATION = 186;
@@ -16,11 +17,11 @@ function App() {
   let [currentTime, setCurrentTime] = React.useState(0);
 
   return (
-    <div className="flex justify-center bg-gray-600 items-center min-h-screen">
-      <div className=" max-w-[390px]  w-full flex mx-auto flex-col relative shadow-2xl overflow-hidden overflow-y-scroll sm:rounded-xl">
-        <div className="flex flex-col items-center flex-1 w-full px-6 shadow-2xl">
+    <div className="flex  justify-center items-center min-h-screen mesh ">
+      <div className=" max-w-[390px]   w-full flex mx-auto flex-col items-center relative shadow-2xl overflow-hidden overflow-y-scroll sm:rounded-xl">
+        <div className="flex flex-col  items-center flex-1 w-full px-6 shadow-2xl">
           <Header />
-
+          <AnimatedGradient />
           <motion.img
             src="./album.webp"
             initial={false}
@@ -68,6 +69,22 @@ function App() {
             <IconBar />
           </div>
         </div>
+
+        <div className="pt-6 pb-6 text-xs font-medium sm:pb-0">
+          <a
+            className=" text-[#273759] hover:text-[#384f80]"
+            href="https://twitter.com/itish_prasad"
+          >
+            @itish_prasad
+          </a>
+          <span className="mx-2 text-[#273759]">&middot;</span>
+          <a
+            href="https://github.com/itishprasad30/apple-music-player/"
+            className="text-[#273759] hover:text-[#384f80]"
+          >
+            GitHub
+          </a>
+        </div>
       </div>
     </div>
   );
@@ -96,11 +113,44 @@ function Header() {
   );
 }
 
+function AnimatedGradient() {
+  let interval = useMotionValue(0);
+  let y = useTransform(interval, (value) => Math.sin(value) * 100);
+  let x = useTransform(interval, (value) => Math.cos(value) * 100);
+
+  React.useEffect(() => {
+    let controls = animate(interval, [0, Math.PI * 2], {
+      repeat: Infinity,
+      duration: 15,
+      ease: "linear",
+    });
+
+    return controls.stop;
+  }, [interval]);
+
+  return (
+    <div className="absolute inset-0 z-[-1] overflow-hidden sm:rounded-xl">
+      <motion.div
+        style={{
+          x,
+          y,
+          scale: 1.75,
+          backgroundColor: "#322840",
+          backgroundImage: `
+            radial-gradient(at 21% 33%, #1f2460 0px, transparent 50%),
+            radial-gradient(at 79% 32%, #2d1e51 0px, transparent 50%),
+            radial-gradient(at 26% 83%, #0f2451 0px, transparent 50%)`,
+        }}
+        className="absolute inset-0"
+      ></motion.div>
+    </div>
+  );
+}
 function Title() {
   return (
     <div className="flex items-center justify-between">
       <div>
-        <p className="text-xl  font-medium leading-tight text-black truncate">
+        <p className="text-xl  font-medium leading-tight text-white truncate">
           You Right
         </p>
         <p className=" text-xl leading-tight truncate text-[#A49FC3]/90">
