@@ -17,8 +17,8 @@ function App() {
   let [currentTime, setCurrentTime] = React.useState(0);
 
   return (
-    <div className="flex  justify-center items-center min-h-screen mesh ">
-      <div className=" max-w-[390px]   w-full flex mx-auto flex-col items-center relative shadow-2xl overflow-hidden overflow-y-scroll sm:rounded-xl">
+    <div className="flex  justify-center items-center min-h-screen  ">
+      <div className=" max-w-[390px]   w-full flex mx-auto flex-col items-center relative shadow-2xl overflow-auto scrollbar-hide   sm:rounded-xl">
         <div className="flex flex-col  items-center flex-1 w-full px-6 shadow-2xl">
           <Header />
           <AnimatedGradient />
