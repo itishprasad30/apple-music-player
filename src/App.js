@@ -4,7 +4,6 @@ import {
   motion,
   LayoutGroup,
   useMotionValue,
-  animate,
   useTransform,
   useMotionTemplate,
   useDragControls,
@@ -62,7 +61,11 @@ function App() {
                 playing={playing}
                 onPlayPause={() => setPlaying(!playing)}
               />
+
+              <Volume />
             </LayoutGroup>
+
+            <IconBar />
           </div>
         </div>
       </div>
@@ -273,6 +276,97 @@ function PlayerControls({ playing, onPlayPause }) {
     </div>
   );
 }
+
+function Volume() {
+  let dragControls = useDragControls();
+  let constraintsRef = React.useRef();
+  let scrubberRef = React.useRef();
+  let fullBarRef = React.useRef();
+  let volume = useMotionValue(50);
+  let width = useMotionTemplate`${volume}%`;
+  let scrubberX = useMotionValue(0);
+
+  React.useLayoutEffect(() => {
+    let initialVolume = getXFromProgress({
+      containerRef: fullBarRef,
+      progress: volume.get() / 100,
+    });
+    scrubberX.set(initialVolume);
+  }, [scrubberX, volume]);
+
+  return (
+    <div className="flex items-center justify-between w-full mt-9">
+      <Icons.VolumeMute className="h-5 text-[#A29CC0]" />
+
+      <div className="relative flex-1 mx-3">
+        <div
+          ref={constraintsRef}
+          className="absolute top-0 -left-2 -right-2 h-[3px]"
+        ></div>
+        <div
+          ref={fullBarRef}
+          className="w-full h-[3px] bg-[#5A526F] rounded-full"
+        ></div>
+        <div
+          className="absolute inset-0 flex items-center w-full"
+          onPointerDown={(event) => {
+            let newVolume = getProgressFromX({
+              containerRef: fullBarRef,
+              x: event.clientX,
+            });
+            dragControls.start(event, { snapToCursor: true });
+            volume.set(newVolume * 100);
+          }}
+        >
+          <motion.div
+            layout
+            style={{ width }}
+            className="w-full h-[3px] bg-[#A29CC0] rounded-full"
+          ></motion.div>
+          <motion.button
+            ref={scrubberRef}
+            style={{ x: scrubberX }}
+            drag="x"
+            dragConstraints={constraintsRef}
+            dragControls={dragControls}
+            dragElastic={0}
+            dragMomentum={false}
+            onDrag={(event) => {
+              let scrubberBounds = scrubberRef.current.getBoundingClientRect();
+              let middleOfScrubber =
+                scrubberBounds.x + scrubberBounds.width / 2;
+              let newVolume = getProgressFromX({
+                containerRef: fullBarRef,
+                x: middleOfScrubber,
+              });
+              volume.set(newVolume * 100);
+            }}
+            className="absolute w-5 h-5 -ml-[5px] bg-white rounded-full cursor-grab active:cursor-grabbing"
+          ></motion.button>
+        </div>
+      </div>
+
+      <Icons.VolumeHigh className="h-5 text-[#A29CC0]" />
+    </div>
+  );
+}
+
+function IconBar() {
+  return (
+    <div className="flex px-[46px] mt-6 justify-between pb-12">
+      <button className="text-[#A29CC0] active:text-white p-1">
+        <Icons.Lyrics className="h-[21px]" />
+      </button>
+      <button className="text-[#A29CC0] active:text-white p-1">
+        <Icons.AirPlay className="h-[21px]" />
+      </button>
+      <button className="text-[#A29CC0] active:text-white p-1">
+        <Icons.List className="h-[21px]" />
+      </button>
+    </div>
+  );
+}
+
 function Button({ children, onClick = () => {}, className }) {
   let [pressing, setPressing] = React.useState(false);
 
