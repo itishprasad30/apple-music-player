@@ -9,13 +9,22 @@ import {
   useDragControls,
   animate,
 } from "framer-motion";
-
-const DURATION = 186;
+import music from "./music.mp3";
+const DURATION = 1000;
 
 function App() {
   let [playing, setPlaying] = React.useState(false);
   let [currentTime, setCurrentTime] = React.useState(0);
+  // const audio = new Audio(music);
 
+  // const start = () => {
+  //   audio.play();
+  // };
+
+  // const toggle = () => setPlaying(!playing);
+  // React.useEffect(() => {
+  //   playing ? audio.play() : audio.pause();
+  // }, [playing, audio]);
   return (
     <div className="flex  justify-center items-center min-h-screen  ">
       <div className=" max-w-[390px]   w-full flex mx-auto flex-col items-center relative shadow-2xl overflow-auto scrollbar-hide   sm:rounded-xl">
@@ -52,6 +61,7 @@ function App() {
           <div className=" mt-[45px] w-full px-2">
             <Title />
             <LayoutGroup>
+              {/* <button onClick={toggle}>{playing ? "Pause " : "Play"}</button> */}
               <ProgressBar
                 playing={playing}
                 currentTime={currentTime}
@@ -303,7 +313,7 @@ function ProgressBar({ playing, currentTime, setCurrentTime }) {
   );
 }
 
-function PlayerControls({ playing, onPlayPause }) {
+function PlayerControls({ playing, start, onPlayPause }) {
   return (
     <div className="mt-6">
       <div className="flex items-center justify-between px-4">
